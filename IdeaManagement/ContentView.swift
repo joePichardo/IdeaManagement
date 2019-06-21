@@ -9,15 +9,47 @@
 import SwiftUI
 
 struct ContentView : View {
+    var categories: [Category] = []
+    var ballots: [Ballot] = []
+    
     var body: some View {
-        Text("Hello World")
+        NavigationView {
+            List {
+                ForEach(categories.identified(by: \.id)) { category in
+                    CategorySection(listTitle: category.name,
+                                    ballots: self.ballots)
+                }
+            }.listStyle(.grouped)
+            .navigationBarTitle(Text("Categories"))
+        }
+        
+    }
+}
+
+struct CategorySection: View {
+    var listTitle: String = ""
+    var ballots: [Ballot] = []
+    
+    var body: some View {
+        Section(header: Text(listTitle).font(.title)) {
+            CategoryRow(ballots: ballots)
+        }
+    }
+}
+
+struct CategoryRow: View {
+    var ballots: [Ballot] = []
+    var body: some View {
+        ForEach(ballots.identified(by: \.id)) { ballot in
+            Text(ballot.name)
+        }
     }
 }
 
 #if DEBUG
 struct ContentView_Previews : PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(categories: categoryTestData, ballots: ballotTestData)
     }
 }
 #endif
