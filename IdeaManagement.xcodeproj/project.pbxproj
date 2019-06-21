@@ -16,6 +16,8 @@
 		5392D08522BC9AA100C99D3C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5392D08322BC9AA100C99D3C /* LaunchScreen.storyboard */; };
 		5392D09022BC9AA100C99D3C /* IdeaManagementTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5392D08F22BC9AA100C99D3C /* IdeaManagementTests.swift */; };
 		5392D09B22BC9AA100C99D3C /* IdeaManagementUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5392D09A22BC9AA100C99D3C /* IdeaManagementUITests.swift */; };
+		5392D0A922BCA20700C99D3C /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5392D0A822BCA20700C99D3C /* Category.swift */; };
+		5392D0AE22BCA8A100C99D3C /* Ballot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5392D0AD22BCA8A100C99D3C /* Ballot.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +53,8 @@
 		5392D09622BC9AA100C99D3C /* IdeaManagementUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IdeaManagementUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5392D09A22BC9AA100C99D3C /* IdeaManagementUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdeaManagementUITests.swift; sourceTree = "<group>"; };
 		5392D09C22BC9AA100C99D3C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5392D0A822BCA20700C99D3C /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		5392D0AD22BCA8A100C99D3C /* Ballot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ballot.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +108,7 @@
 				5392D07522BC9A9F00C99D3C /* AppDelegate.swift */,
 				5392D07722BC9A9F00C99D3C /* SceneDelegate.swift */,
 				5392D07C22BC9A9F00C99D3C /* ContentView.swift */,
+				5392D0AA22BCA21000C99D3C /* Model */,
 				5392D07E22BC9AA100C99D3C /* Assets.xcassets */,
 				5392D08322BC9AA100C99D3C /* LaunchScreen.storyboard */,
 				5392D08622BC9AA100C99D3C /* Info.plist */,
@@ -137,6 +142,15 @@
 				5392D09C22BC9AA100C99D3C /* Info.plist */,
 			);
 			path = IdeaManagementUITests;
+			sourceTree = "<group>";
+		};
+		5392D0AA22BCA21000C99D3C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5392D0A822BCA20700C99D3C /* Category.swift */,
+				5392D0AD22BCA8A100C99D3C /* Ballot.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,7 +285,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5392D07622BC9A9F00C99D3C /* AppDelegate.swift in Sources */,
+				5392D0A922BCA20700C99D3C /* Category.swift in Sources */,
 				5392D07B22BC9A9F00C99D3C /* IdeaManagement.xcdatamodeld in Sources */,
+				5392D0AE22BCA8A100C99D3C /* Ballot.swift in Sources */,
 				5392D07D22BC9A9F00C99D3C /* ContentView.swift in Sources */,
 				5392D07822BC9A9F00C99D3C /* SceneDelegate.swift in Sources */,
 			);
