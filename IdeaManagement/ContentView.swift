@@ -41,7 +41,12 @@ struct CategoryRow: View {
     var ballots: [Ballot] = []
     var body: some View {
         ForEach(ballots.identified(by: \.id)) { ballot in
-            Text(ballot.name)
+            VStack(alignment: .leading) {
+                Text(ballot.name)
+                Text("10 Ideas")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
         }
     }
 }
