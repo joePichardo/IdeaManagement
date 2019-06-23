@@ -9,19 +9,25 @@
 import SwiftUI
 
 struct ContentView : View {
+    
     var categories: [Category] = []
-    var ballots: [Ballot] = []
     
     var body: some View {
         NavigationView {
             List {
+                Button(action: addCategory) {
+                    Text("Add Category")
+                }
                 ForEach(categories.identified(by: \.id)) { category in
                     CategorySection(listTitle: category.name,
-                                    ballots: self.ballots)
+                                    ballots: category.ballots)
                 }
             }.listStyle(.grouped)
             .navigationBarTitle(Text("Categories"))
         }
+    }
+    
+    func addCategory() {
         
     }
 }
@@ -32,15 +38,26 @@ struct CategorySection: View {
     
     var body: some View {
         Section(header: Text(listTitle).font(.title)) {
-            CategoryRow(ballots: ballots)
+            ForEach(ballots.identified(by: \.id)) { ballot in
+                NavigationButton(destination: BallotDetail(ballot: ballot)) {
+                    CategoryRow(ballot: ballot)
+                }
+            }
         }
     }
 }
 
 struct CategoryRow: View {
-    var ballots: [Ballot] = []
+    var ballot = Ballot(name: "", ideas: [])
     var body: some View {
-        ForEach(ballots.identified(by: \.id)) { ballot in
+        HStack {
+            ZStack {
+                Circle()
+                    .foregroundColor(Color.red)
+                Text("100")
+                    .foregroundColor(Color.white)
+                    .font(.body)
+            }.frame(width: 50.0)
             VStack(alignment: .leading) {
                 Text(ballot.name)
                 Text("10 Ideas")
@@ -54,7 +71,7 @@ struct CategoryRow: View {
 #if DEBUG
 struct ContentView_Previews : PreviewProvider {
     static var previews: some View {
-        ContentView(categories: categoryTestData, ballots: ballotTestData)
+        ContentView(categories: categoryTestData)
     }
 }
 #endif
