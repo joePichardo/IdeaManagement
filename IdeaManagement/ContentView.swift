@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ContentView : View {
     
-    var categories: [Category] = []
+    @ObjectBinding var store = CategoryStore()
     
     var body: some View {
         NavigationView {
@@ -18,7 +18,7 @@ struct ContentView : View {
                 Button(action: addCategory) {
                     Text("Add Category")
                 }
-                ForEach(categories.identified(by: \.id)) { category in
+                ForEach(store.categories.identified(by: \.id)) { category in
                     CategorySection(listTitle: category.name,
                                     ballots: category.ballots)
                 }
@@ -71,7 +71,7 @@ struct CategoryRow: View {
 #if DEBUG
 struct ContentView_Previews : PreviewProvider {
     static var previews: some View {
-        ContentView(categories: categoryTestData)
+        ContentView(store: CategoryStore(categories: categoryTestData) )
     }
 }
 #endif
