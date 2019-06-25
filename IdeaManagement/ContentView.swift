@@ -15,42 +15,52 @@ struct ContentView : View {
     var body: some View {
         NavigationView {
             List {
-                Button(action: addCategory) {
-                    Text("Add Category")
+                Section {
+                    Button(action: addCategory) {
+                        Text("Add Category")
+                    }
                 }
-                ForEach(store.categories.identified(by: \.id)) { category in
-                    CategorySection(listTitle: category.name,
-                                    ballots: category.ballots)
+                Section {
+                    ForEach(store.categories.identified(by: \.id)) { category in
+                        CategoryCell(category: category.name)
+                    }.onDelete(perform: delete)
+                    .onMove(perform: move)
                 }
-            }.listStyle(.grouped)
+            }
             .navigationBarTitle(Text("Categories"))
+            .navigationBarItems(trailing: EditButton())
+            .listStyle(.grouped)
         }
     }
     
     func addCategory() {
-        
+        store.categories.insert(Category(name: "Test Category", ballots: ballotTestData), at: 0)
     }
-}
-
-struct CategorySection: View {
-    var listTitle: String = ""
-    var ballots: [Ballot] = []
     
-    var body: some View {
-        Section(header: Text(listTitle).font(.title)) {
-            ForEach(ballots.identified(by: \.id)) { ballot in
-                NavigationButton(destination: BallotDetail(ballot: ballot)) {
-                    CategoryRow(ballot: ballot)
-                }
-            }
+    func delete(at offsets: IndexSet) {
+        if let first = offsets.first {
+            store.categories.remove(at: first)
+        }
+    }
+    
+    func move(from source: IndexSet, to destination: Int) {
+        
+        // sort the indexes low to high
+        let reversedSource = source.sorted()
+        
+        // then loop from the back to avoid reordering problems
+        for index in reversedSource.reversed() {
+            // for each item, remove it and insert it at the destination
+            store.categories.insert(store.categories.remove(at: index), at: destination)
         }
     }
 }
 
-struct CategoryRow: View {
-    var ballot = Ballot(name: "", ideas: [])
+struct CategoryCell: View {
+    var category: String
+    
     var body: some View {
-        HStack {
+        NavigationButton(destination: Text(category)) {
             ZStack {
                 Circle()
                     .foregroundColor(Color.red)
@@ -59,8 +69,8 @@ struct CategoryRow: View {
                     .font(.body)
             }.frame(width: 50.0)
             VStack(alignment: .leading) {
-                Text(ballot.name)
-                Text("10 Ideas")
+                Text(category)
+                Text("10 Lists")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
