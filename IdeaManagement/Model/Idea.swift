@@ -11,15 +11,16 @@ import SwiftUI
 struct Idea : Identifiable {
     var id = UUID()
     var name: String
+    var ratings: [Rating]
 }
 
 #if DEBUG
 let ideaTestData = [
-    Idea(name: "App"),
-    Idea(name: "Travel"),
-    Idea(name: "Business"),
-    Idea(name: "Books"),
-    Idea(name: "Dinner"),
-    Idea(name: "Holiday")
+    Idea(name: "Idea #1", ratings: ratingTestData),
+    Idea(name: "Idea #2", ratings: ratingTestData),
+    Idea(name: "Idea #3", ratings: ratingTestData),
+    Idea(name: "Idea #4", ratings: ratingTestData),
+    Idea(name: "Idea #5", ratings: ratingTestData),
+    Idea(name: "Idea #6", ratings: ratingTestData)
 ]
 #endif
