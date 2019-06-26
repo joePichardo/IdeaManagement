@@ -60,7 +60,7 @@ struct CategoryCell: View {
     var category: String
     
     var body: some View {
-        NavigationButton(destination: Text(category)) {
+        NavigationButton(destination: BallotDetail()) {
             ZStack {
                 Circle()
                     .foregroundColor(Color.red)
