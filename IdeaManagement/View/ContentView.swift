@@ -22,7 +22,7 @@ struct ContentView : View {
                 }
                 Section {
                     ForEach(store.categories.identified(by: \.id)) { category in
-                        CategoryCell(category: category.name)
+                        CategoryCell(category: category)
                     }.onDelete(perform: delete)
                     .onMove(perform: move)
                 }
@@ -57,7 +57,7 @@ struct ContentView : View {
 }
 
 struct CategoryCell: View {
-    var category: String
+    var category: Category
     
     var body: some View {
         NavigationButton(destination: BallotDetail()) {
@@ -69,8 +69,8 @@ struct CategoryCell: View {
                     .font(.body)
             }.frame(width: 50.0)
             VStack(alignment: .leading) {
-                Text(category)
-                Text("10 Lists")
+                Text(category.name)
+                Text("\(category.ballots.count) Lists")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
