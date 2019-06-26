@@ -16,11 +16,11 @@ struct Ballot : Identifiable {
 
 #if DEBUG
 let ballotTestData = [
-    Ballot(name: "App", ideas: ideaTestData),
-    Ballot(name: "Travel", ideas: ideaTestData),
-    Ballot(name: "Business", ideas: ideaTestData),
-    Ballot(name: "Books", ideas: ideaTestData),
-    Ballot(name: "Dinner", ideas: ideaTestData),
-    Ballot(name: "Holiday", ideas: ideaTestData)
+    Ballot(name: "List #1", ideas: ideaTestData),
+    Ballot(name: "List #2", ideas: ideaTestData),
+    Ballot(name: "List #3", ideas: ideaTestData),
+    Ballot(name: "List #4", ideas: ideaTestData),
+    Ballot(name: "List #5", ideas: ideaTestData),
+    Ballot(name: "List #6", ideas: ideaTestData)
 ]
 #endif
