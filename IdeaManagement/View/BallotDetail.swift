@@ -80,7 +80,9 @@ struct BallotCell: View {
 #if DEBUG
 struct BallotDetail_Previews : PreviewProvider {
     static var previews: some View {
-        BallotDetail(store: BallotStore(ballots: ballotTestData))
+        NavigationView {
+            BallotDetail(store: BallotStore(ballots: ballotTestData))
+        }
     }
 }
 #endif
