@@ -13,22 +13,53 @@ struct BallotDetail : View {
     @ObjectBinding var store = BallotStore()
     
     var body: some View {
-        List {
-            Section {
-                Button(action: addList) {
-                    Text("Add List")
+        ScrollView {
+            ForEach(store.ballots.identified(by: \.id)) {
+                ballot in
+                NavigationLink(destination: Text(ballot.name)) {
+                    if ballot.id == self.store.ballots[0].id {
+                        HStack {
+                            Text("Add New List").foregroundColor(.primary)
+                            Image(systemName: "checkmark.seal.fill").foregroundColor(.green)
+                            Spacer()
+                            Image(systemName: "chevron.right.circle.fill")
+                        }
+                        .font(.system(size: 24, design: .rounded))
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(8)
+                            .shadow(radius: 1, y: 1)
+                        HStack {
+                            Text(ballot.name).foregroundColor(.primary)
+                            Image(systemName: "checkmark.seal.fill").foregroundColor(.green)
+                            Spacer()
+                            Image(systemName: "chevron.right.circle.fill")
+                        }
+                        .font(.system(size: 24, design: .rounded))
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(8)
+                            .shadow(radius: 1, y: 1)
+                    } else {
+                        HStack {
+                            Text(ballot.name).foregroundColor(.primary)
+                            Image(systemName: "checkmark.seal.fill").foregroundColor(.green)
+                            Spacer()
+                            Image(systemName: "chevron.right.circle.fill")
+                        }
+                        .font(.system(size: 24, design: .rounded))
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(8)
+                            .shadow(radius: 1, y: 1)
+                    }
                 }
             }
-            Section {
-                ForEach(store.ballots.identified(by: \.id)) { ballot in
-                    BallotCell(ballot: ballot.name)
-                }.onDelete(perform: delete)
-                .onMove(perform: move)
-            }
-        }
-        .navigationBarTitle(Text("Lists"))
-        .navigationBarItems(trailing: EditButton())
-        .listStyle(.grouped)
+            .padding([.leading, .trailing], 15)
+                .accentColor(Color.pink)
+        }.navigationBarTitle(Text("Lists"))
+            .navigationBarItems(trailing: EditButton())
+            .listStyle(.grouped)
     }
     
     func addList() {
@@ -58,7 +89,7 @@ struct BallotCell: View {
     var ballot: String
     
     var body: some View {
-        NavigationButton(destination: Text(ballot)) {
+        NavigationLink(destination: Text(ballot)) {
             ZStack {
                 Circle()
                     .foregroundColor(Color.red)
