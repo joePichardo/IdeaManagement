@@ -8,7 +8,15 @@
 
 import SwiftUI
 
-struct Category : Identifiable {
+struct Category : Identifiable, Equatable {
+    static func == (lhs: Category, rhs: Category) -> Bool {
+        if lhs.id == rhs.id {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     var id = UUID()
     var name: String
     var ballots: [Ballot]
@@ -22,5 +30,6 @@ let categoryTestData = [
     Category(name: "Books", ballots: ballotTestData),
     Category(name: "Dinner", ballots: ballotTestData),
     Category(name: "Holiday", ballots: ballotTestData),
+    Category(name: "Gifts", ballots: ballotTestData),
 ]
 #endif
