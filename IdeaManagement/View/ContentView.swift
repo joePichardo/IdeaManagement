@@ -22,11 +22,12 @@ struct ContentView : View {
                         Image(systemName: "chevron.right.circle.fill")
                     }
                     .font(.headline)
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(8)
-                        .shadow(radius: 1, y: 1)
-                }.accentColor(Color.green)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(8)
+                    .shadow(radius: 1, y: 1)
+                }
+                .accentColor(Color.green)
                 .padding([.leading, .trailing], 10)
                 
                 ForEach(store.categories.identified(by: \.id)) {
@@ -113,12 +114,13 @@ struct CategoryCellItem: View {
                 Spacer()
                 Image(systemName: "chevron.right.circle.fill")
             }
-        }.frame(height: 100)
-            .font(.headline)
-            .padding()
-            .background(LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: 0.56, green: 0.02, blue: 1.00, opacity: 1.0), Color(.sRGB, red: 0.13, green: 0.98, blue: 0.84, opacity: 1.0)]), startPoint: UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: 1, y: 1)), cornerRadius: 0)
-            .cornerRadius(30)
-            .shadow(radius: 1, y: 1)
+        }
+        .frame(height: (UIScreen.main.bounds.width / 2) - 60)
+        .font(.headline)
+        .padding()
+        .background(LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: 0.56, green: 0.02, blue: 1.00, opacity: 1.0), Color(.sRGB, red: 0.13, green: 0.98, blue: 0.84, opacity: 1.0)]), startPoint: UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: 1, y: 1)), cornerRadius: 0)
+        .cornerRadius(30)
+        .shadow(radius: 1, y: 1)
     }
 }
 
