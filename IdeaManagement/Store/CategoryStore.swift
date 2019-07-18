@@ -8,17 +8,72 @@
 
 import SwiftUI
 import Combine
+import CoreData
 
-class CategoryStore: BindableObject {
-    var didChange = PassthroughSubject<Void, Never>()
+@objc(CategoryStore)
+class CategoryStore: NSObject, BindableObject {
     
-    var categories: [Category] {
-        didSet {
-            didChange.send(())
+    // MARK: Private Properties
+    private let persistenceManager = PersistenceManager()
+    
+    private lazy var fetchedResultsController: NSFetchedResultsController<Category> = {
+        let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createdOn", ascending: false)]
+        
+        let fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: self.persistenceManager.managedObjectContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
+        fetchedResultsController.delegate = self
+        return fetchedResultsController
+    }()
+    
+    public var categories: [Category] {
+        return fetchedResultsController.fetchedObjects ?? []
+    }
+    
+    // MARK: Public Properties
+    
+    let didChange = PassthroughSubject<CategoryStore, Never>()
+    
+    // MARK: Object Lifecycle
+    
+    override init() {
+        super.init()
+        fetchCategories()
+    }
+    
+    // MARK: Public Methods
+    
+    public func create(name: String) {
+        Category.create(name: name, in: persistenceManager.managedObjectContext)
+        saveChanges()
+    }
+    
+    // MARK: Private Methods
+    
+    private func fetchCategories() {
+        do {
+            try fetchedResultsController.performFetch()
+//            dump(fetchedResultsController.sections)
+        } catch {
+            fatalError()
         }
     }
     
-    init(categories: [Category] = []) {
-        self.categories = categories
+    private func saveChanges() {
+        guard persistenceManager.managedObjectContext.hasChanges else { return }
+        do {
+            try persistenceManager.managedObjectContext.save()
+        } catch { fatalError() }
     }
 }
+
+// MARK: TodoStore + NSFetchedResultsControllerDelegate
+extension CategoryStore: NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        didChange.send(self)
+    }
+}
+
