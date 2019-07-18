@@ -7,28 +7,26 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ContentView : View {
     
-    @ObjectBinding var store = CategoryStore()
+    @EnvironmentObject var store: CategoryStore
     
     var body: some View {
         NavigationView {
             ScrollView {
-                Button(action: {self.addCategory()}) {
-                    HStack {
-                        Text("Add New Category").foregroundColor(.primary)
-                        Spacer()
-                        Image(systemName: "chevron.right.circle.fill")
-                    }
-                    .font(.headline)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(8)
-                    .shadow(radius: 1, y: 1)
-                }
-                .accentColor(Color.green)
-                .padding([.leading, .trailing], 10)
+                Button(action: {
+                    self.store.create(name: "hi")
+                }) {
+                    addCategoryButton()
+                }.animation(.basic())
+                
+//                NavigationLink(destination: addCategoryForm()) {
+//                    addCategoryButton()
+//                }
+//                .accentColor(Color.green)
+//                .padding([.leading, .trailing], 10)
                 
                 ForEach(store.categories.identified(by: \.id)) {
                     category in
@@ -49,25 +47,48 @@ struct ContentView : View {
     }
     
     func addCategory() {
-        store.categories.insert(Category(name: "Test Category", ballots: ballotTestData), at: 0)
+//        store.categories.insert(Category(name: "Test Category", ballots: ballotTestData), at: 0)
     }
     
     func delete(at offsets: IndexSet) {
-        if let first = offsets.first {
-            store.categories.remove(at: first)
-        }
+//        if let first = offsets.first {
+//            store.categories.remove(at: first)
+//        }
     }
     
     func move(from source: IndexSet, to destination: Int) {
         
-        // sort the indexes low to high
-        let reversedSource = source.sorted()
-        
-        // then loop from the back to avoid reordering problems
-        for index in reversedSource.reversed() {
-            // for each item, remove it and insert it at the destination
-            store.categories.insert(store.categories.remove(at: index), at: destination)
+//        // sort the indexes low to high
+//        let reversedSource = source.sorted()
+//
+//        // then loop from the back to avoid reordering problems
+//        for index in reversedSource.reversed() {
+//            // for each item, remove it and insert it at the destination
+//            store.categories.insert(store.categories.remove(at: index), at: destination)
+//        }
+    }
+}
+
+struct addCategoryButton : View {
+    var body: some View {
+        return HStack {
+            Text("Add New Category").foregroundColor(.primary)
+            Spacer()
+            Image(systemName: "chevron.right.circle.fill")
         }
+        .font(.headline)
+        .padding()
+        .background(Color.white)
+        .cornerRadius(8)
+        .shadow(radius: 3, y: 0)
+    }
+}
+
+struct addCategoryForm : View {
+    var body: some View {
+        Text("Content")
+            .navigationBarTitle(Text("Add New Category"))
+            .navigationBarItems(trailing: Text("Done"))
     }
 }
 
@@ -77,13 +98,13 @@ struct CategoryCell: View {
     
     var body: some View {
         HStack {
-            NavigationLink(destination: BallotDetail(store: BallotStore(ballots: category.ballots))) {
+            NavigationLink(destination: Text("hi")) {
                 CategoryCellItem(name: category.name)
             }
             IfLet(categories.firstIndex(of: category)) { index in
                 Group {
                     if self.categories.indices.contains(index + 1) {
-                        NavigationLink(destination: BallotDetail(store: BallotStore(ballots: self.categories[index + 1].ballots))) {
+                        NavigationLink(destination: Text("hi")) {
                             CategoryCellItem(name: self.categories[index + 1].name)
                         }
                     } else {
@@ -106,6 +127,7 @@ struct CategoryCellItem: View {
                 VStack(alignment: .leading) {
                     Text(name)
                         .foregroundColor(.white)
+                        .lineLimit(2)
                     Rectangle()
                         .fill(Color.white)
                         .frame(width: 30, height: 2)
@@ -116,11 +138,12 @@ struct CategoryCellItem: View {
             }
         }
         .frame(height: (UIScreen.main.bounds.width / 2) - 60)
+        .frame(minHeight: 100, maxHeight: 200)
         .font(.headline)
         .padding()
         .background(LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: 0.56, green: 0.02, blue: 1.00, opacity: 1.0), Color(.sRGB, red: 0.13, green: 0.98, blue: 0.84, opacity: 1.0)]), startPoint: UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: 1, y: 1)), cornerRadius: 0)
         .cornerRadius(30)
-        .shadow(radius: 1, y: 1)
+        .shadow(radius: 5, y: 0)
     }
 }
 
@@ -146,7 +169,7 @@ struct IfLet<T, Out: View>: View {
 #if DEBUG
 struct ContentView_Previews : PreviewProvider {
     static var previews: some View {
-        ContentView(store: CategoryStore(categories: categoryTestData) )
+        ContentView().environmentObject(CategoryStore())
     }
 }
 #endif
