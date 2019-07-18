@@ -20,12 +20,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         
         // Use a UIHostingController as window root view controller
-        if let windowScene = scene as? UIWindowScene {
-            let window = UIWindow(windowScene: windowScene)
-            window.rootViewController = UIHostingController(rootView: ContentView())
-            self.window = window
-            window.makeKeyAndVisible()
-        }
+        
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        
+        let categoryStore = CategoryStore()
+        let contentView = ContentView()
+            .environmentObject(categoryStore)
+        
+        let hostingController = UIHostingController(rootView: contentView)
+        window.rootViewController = hostingController
+        self.window = window
+        window.makeKeyAndVisible()
     }
     
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -54,9 +59,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Called as the scene transitions from the foreground to the background.
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
-        
-        // Save changes in the application's managed object context when the application transitions to the background.
-        (UIApplication.shared.delegate as? AppDelegate)?.saveContext()
     }
     
     
