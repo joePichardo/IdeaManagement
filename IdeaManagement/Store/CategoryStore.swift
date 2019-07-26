@@ -35,7 +35,7 @@ class CategoryStore: NSObject, BindableObject {
     
     // MARK: Public Properties
     
-    let didChange = PassthroughSubject<CategoryStore, Never>()
+    let willChange = PassthroughSubject<CategoryStore, Never>()
     
     // MARK: Object Lifecycle
     
@@ -48,6 +48,25 @@ class CategoryStore: NSObject, BindableObject {
     
     public func create(name: String) {
         Category.create(name: name, in: persistenceManager.managedObjectContext)
+        saveChanges()
+    }
+    
+    public func delete() {
+        if categories.count > 0 {
+            self.persistenceManager.managedObjectContext.delete(categories[0])
+            saveChanges()
+        }
+    }
+    
+    public func deleteById(id: UUID) {        
+        var filteredId: [Category] {
+            return self.categories.filter { $0.id == id }
+        }
+        
+        for category in filteredId {
+            self.persistenceManager.managedObjectContext.delete(category)
+        }
+        
         saveChanges()
     }
     
@@ -73,7 +92,7 @@ class CategoryStore: NSObject, BindableObject {
 // MARK: TodoStore + NSFetchedResultsControllerDelegate
 extension CategoryStore: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        didChange.send(self)
+        willChange.send(self)
     }
 }
 
