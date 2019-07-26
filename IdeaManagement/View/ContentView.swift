@@ -19,8 +19,8 @@ struct ContentView : View {
                 Button(action: {
                     self.store.create(name: "hi")
                 }) {
-                    addCategoryButton()
-                }.animation(.basic())
+                    addCategoryButton().padding([.leading, .trailing], 10)
+                }
                 
 //                NavigationLink(destination: addCategoryForm()) {
 //                    addCategoryButton()
@@ -28,17 +28,17 @@ struct ContentView : View {
 //                .accentColor(Color.green)
 //                .padding([.leading, .trailing], 10)
                 
-                ForEach(store.categories.identified(by: \.id)) {
+                ForEach(store.categories, id: \.id) {
                     category in
                     if (self.store.categories.firstIndex(of: category) ?? 1) % 2 == 0 {
-                        CategoryCell(category: category, categories: self.store.categories)
+                        ZStack {
+                            CategoryCell(category: category, categories: self.store.categories)
+                        }
                     }
                     
                 }
                 .padding([.leading, .trailing], 10)
                 .accentColor(Color.white)
-                .onDelete(perform: delete)
-                .onMove(perform: move)
             }
             .navigationBarTitle(Text("Categories"))
             .navigationBarItems(trailing: EditButton())
@@ -84,6 +84,25 @@ struct addCategoryButton : View {
     }
 }
 
+struct deleteCategoryButton : View {
+    var body: some View {
+        HStack {
+            ZStack {
+                Rectangle()
+                    .fill(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.5))
+                    .blur(radius: 20)
+                    .frame(width: 40, height: 40)
+                Image(systemName: "xmark")
+                    .foregroundColor(.white)
+            }
+        }
+        .font(.headline)
+        .background(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.5))
+        .cornerRadius(8)
+        .shadow(radius: 3, y: 0)
+    }
+}
+
 struct addCategoryForm : View {
     var body: some View {
         Text("Content")
@@ -93,19 +112,52 @@ struct addCategoryForm : View {
 }
 
 struct CategoryCell: View {
+    @EnvironmentObject var store: CategoryStore
     var category: Category
     var categories: [Category]
     
     var body: some View {
         HStack {
-            NavigationLink(destination: Text("hi")) {
-                CategoryCellItem(name: category.name)
+            ZStack {
+                NavigationLink(destination: Text("hi")) {
+                    CategoryCellItem(category: category)
+                }
+                HStack {
+                    Spacer()
+                    VStack {
+                        Button(action: {
+                            self.store.deleteById(id: self.category.id)
+                        }) {
+                            deleteCategoryButton()
+                        }
+                        Spacer()
+                    }
+                }
+                .frame(height: (UIScreen.main.bounds.width / 2) - 60)
+                .padding()
             }
+            
+            // This is the right side category, then spacer is for consistent spacingon right edge
             IfLet(categories.firstIndex(of: category)) { index in
                 Group {
                     if self.categories.indices.contains(index + 1) {
-                        NavigationLink(destination: Text("hi")) {
-                            CategoryCellItem(name: self.categories[index + 1].name)
+                        ZStack {
+                            NavigationLink(destination: Text("hi")) {
+                                CategoryCellItem(category: self.categories[index + 1])
+                            }
+                            HStack {
+                                Spacer()
+                                VStack {
+                                    Button(action: {
+                                        self.store.deleteById(id: self.categories[index + 1].id)
+                                    }) {
+                                        deleteCategoryButton()
+                                    }
+                                    Spacer()
+                                }
+                            }
+                            .frame(height: (UIScreen.main.bounds.width / 2) - 60)
+                            .padding()
                         }
                     } else {
                         Spacer()
@@ -118,14 +170,14 @@ struct CategoryCell: View {
 }
 
 struct CategoryCellItem: View {
-    var name: String
+    var category: Category
     
     var body: some View {
         VStack {
             Spacer()
             HStack {
                 VStack(alignment: .leading) {
-                    Text(name)
+                    Text(self.category.name)
                         .foregroundColor(.white)
                         .lineLimit(2)
                     Rectangle()
