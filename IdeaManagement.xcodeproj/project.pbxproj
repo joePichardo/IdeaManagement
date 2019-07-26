@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		530E6E0322C31D440049CAC6 /* BallotStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530E6E0222C31D440049CAC6 /* BallotStore.swift */; };
-		531DA62322DF828D0067D708 /* Category+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DA62222DF828D0067D708 /* Category+CoreDataProperties.swift */; };
+		531DA62522E21C390067D708 /* Category+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531DA62422E21C390067D708 /* Category+CoreDataProperties.swift */; };
 		536DFF4C22BEB6360060C8F8 /* CategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536DFF4B22BEB6360060C8F8 /* CategoryStore.swift */; };
 		5392D07622BC9A9F00C99D3C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5392D07522BC9A9F00C99D3C /* AppDelegate.swift */; };
 		5392D07822BC9A9F00C99D3C /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5392D07722BC9A9F00C99D3C /* SceneDelegate.swift */; };
@@ -43,7 +43,7 @@
 
 /* Begin PBXFileReference section */
 		530E6E0222C31D440049CAC6 /* BallotStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BallotStore.swift; sourceTree = "<group>"; };
-		531DA62222DF828D0067D708 /* Category+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		531DA62422E21C390067D708 /* Category+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		536DFF4B22BEB6360060C8F8 /* CategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryStore.swift; sourceTree = "<group>"; };
 		5392D07222BC9A9F00C99D3C /* IdeaManagement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IdeaManagement.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5392D07522BC9A9F00C99D3C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -176,7 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				53D21E6922DA739700E99A77 /* Category+CoreDataClass.swift */,
-				531DA62222DF828D0067D708 /* Category+CoreDataProperties.swift */,
+				531DA62422E21C390067D708 /* Category+CoreDataProperties.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -317,7 +317,7 @@
 				536DFF4C22BEB6360060C8F8 /* CategoryStore.swift in Sources */,
 				5392D0B022BE793C00C99D3C /* BallotDetail.swift in Sources */,
 				5392D07B22BC9A9F00C99D3C /* IdeaManagement.xcdatamodeld in Sources */,
-				531DA62322DF828D0067D708 /* Category+CoreDataProperties.swift in Sources */,
+				531DA62522E21C390067D708 /* Category+CoreDataProperties.swift in Sources */,
 				53D21E7E22DBD3D500E99A77 /* PersistenceManager.swift in Sources */,
 				530E6E0322C31D440049CAC6 /* BallotStore.swift in Sources */,
 				5392D07D22BC9A9F00C99D3C /* ContentView.swift in Sources */,
