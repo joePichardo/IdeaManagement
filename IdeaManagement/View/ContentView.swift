@@ -12,12 +12,13 @@ import CoreData
 struct ContentView : View {
     
     @EnvironmentObject var store: CategoryStore
+    @State var showModalAddCategory = false
     
     var body: some View {
         NavigationView {
             ScrollView {
                 Button(action: {
-                    self.store.create(name: "hi")
+                    self.showModalAddCategory.toggle()
                 }) {
                     addCategoryButton().padding([.leading, .trailing], 10)
                 }
@@ -43,7 +44,7 @@ struct ContentView : View {
             .navigationBarTitle(Text("Categories"))
             .navigationBarItems(trailing: EditButton())
             .listStyle(.grouped)
-        }
+        }.sheet(isPresented: $showModalAddCategory, content: { modalAddCategory(store: self.store, showModal: self.$showModalAddCategory) })
     }
     
     func addCategory() {
@@ -66,6 +67,43 @@ struct ContentView : View {
 //            // for each item, remove it and insert it at the destination
 //            store.categories.insert(store.categories.remove(at: index), at: destination)
 //        }
+    }
+}
+
+struct modalAddCategory: View {
+    var store: CategoryStore
+    @Binding var showModal: Bool
+    @State var categoryName = ""
+    var body: some View {
+        ZStack {
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        self.showModal.toggle()
+                        self.categoryName = ""
+                    }) {
+                        Text("Cancel").padding()
+                    }
+                }
+                CategoryCellItemEmpty(categoryName: $categoryName).padding()
+                TextField("Enter the category name", text: $categoryName).padding()
+                Spacer()
+                Button(action: {
+                    self.showModal.toggle()
+                    if(!self.categoryName.isEmpty) {
+                        self.store.create(name: self.categoryName)
+                        self.categoryName = ""
+                    }
+                }) {
+                    Text("Save")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(Color.white)
+                        .cornerRadius(8)
+                }
+            }
+        }
     }
 }
 
@@ -203,6 +241,36 @@ struct CategoryCellItem: View {
                 }
                 Spacer()
                 Image(systemName: "chevron.right.circle.fill")
+            }
+        }
+        .frame(height: (UIScreen.main.bounds.width / 2) - 60)
+        .frame(minHeight: 100, maxHeight: 200)
+        .font(.headline)
+        .padding()
+        .background(LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: 0.56, green: 0.02, blue: 1.00, opacity: 1.0), Color(.sRGB, red: 0.13, green: 0.98, blue: 0.84, opacity: 1.0)]), startPoint: UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: 1, y: 1)), cornerRadius: 0)
+        .cornerRadius(30)
+        .shadow(radius: 5, y: 0)
+    }
+}
+
+struct CategoryCellItemEmpty: View {
+    @Binding var categoryName: String
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(categoryName)
+                        .foregroundColor(.white)
+                        .lineLimit(2)
+                    Rectangle()
+                        .fill(Color.white)
+                        .frame(width: 30, height: 2)
+                        .cornerRadius(1)
+                }
+                Spacer()
+                Image(systemName: "chevron.right.circle.fill").foregroundColor(Color.white)
             }
         }
         .frame(height: (UIScreen.main.bounds.width / 2) - 60)
