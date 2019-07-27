@@ -46,8 +46,8 @@ class CategoryStore: NSObject, BindableObject {
     
     // MARK: Public Methods
     
-    public func create(name: String) {
-        Category.create(name: name, in: persistenceManager.managedObjectContext)
+    public func create(name: String, colorOneR: Double, colorOneG: Double, colorOneB: Double, colorOneA: Double, colorTwoR: Double, colorTwoG: Double, colorTwoB: Double, colorTwoA: Double) {
+        Category.create(name: name, colorOneR: colorOneR, colorOneG: colorOneG, colorOneB: colorOneB, colorOneA: colorOneA, colorTwoR: colorTwoR, colorTwoG: colorTwoG, colorTwoB: colorTwoB, colorTwoA: colorTwoA, in: persistenceManager.managedObjectContext)
         saveChanges()
     }
     
