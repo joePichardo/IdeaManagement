@@ -27,6 +27,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.rootViewController = UIHostingController(rootView: contentView)
             self.window = window
             window.makeKeyAndVisible()
+        } else {
+            let window = UIWindow(frame: UIScreen.main.bounds)
+                    
+            let categoryStore = CategoryStore()
+            let contentView = ContentView()
+                .environmentObject(categoryStore)
+            
+            let hostingController = UIHostingController(rootView: contentView)
+            window.rootViewController = hostingController
+            self.window = window
+            window.makeKeyAndVisible()
         }
     }
     
