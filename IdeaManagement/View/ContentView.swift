@@ -22,13 +22,6 @@ struct ContentView : View {
                 }) {
                     addCategoryButton().padding([.leading, .trailing], 10)
                 }
-                
-//                NavigationLink(destination: addCategoryForm()) {
-//                    addCategoryButton()
-//                }
-//                .accentColor(Color.green)
-//                .padding([.leading, .trailing], 10)
-                
                 ForEach(store.categories, id: \.id) {
                     category in
                     if (self.store.categories.firstIndex(of: category) ?? 1) % 2 == 0 {
@@ -74,6 +67,17 @@ struct modalAddCategory: View {
     var store: CategoryStore
     @Binding var showModal: Bool
     @State var categoryName = ""
+    
+    @State var colorOneR: Double = 0
+    @State var colorOneG: Double = 0
+    @State var colorOneB: Double = 0
+    @State var colorOneA: Double = 1
+    
+    @State var colorTwoR: Double = 0
+    @State var colorTwoG: Double = 0
+    @State var colorTwoB: Double = 0
+    @State var colorTwoA: Double = 1
+    
     var body: some View {
         ZStack {
             VStack {
@@ -83,16 +87,56 @@ struct modalAddCategory: View {
                         self.showModal.toggle()
                         self.categoryName = ""
                     }) {
-                        Text("Cancel").padding()
+                        Text("Cancel")
                     }
                 }
-                CategoryCellItemEmpty(categoryName: $categoryName).padding()
+                CategoryCellItemEmpty(categoryName: $categoryName, colorOneR: $colorOneR, colorOneG: $colorOneG, colorOneB: $colorOneB, colorOneA: $colorOneA, colorTwoR: $colorTwoR, colorTwoG: $colorTwoG, colorTwoB: $colorTwoB, colorTwoA: $colorTwoA).padding()
                 TextField("Enter the category name", text: $categoryName).padding()
+                VStack {
+                    Text("Color One").lineLimit(nil)
+                    HStack {
+                        VStack{
+                            Text("Red")
+                            Spacer()
+                            Text("Green")
+                            Spacer()
+                            Text("Blue")
+                            Spacer()
+                            Text("Opacity")
+                        }.padding([.trailing], 15)
+                        VStack {
+                            Slider(value: $colorOneR, from: 0, through: 1, by: 0.01)
+                            Slider(value: $colorOneG, from: 0, through: 1, by: 0.01)
+                            Slider(value: $colorOneB, from: 0, through: 1, by: 0.01)
+                            Slider(value: $colorOneA, from: 0, through: 1, by: 0.01)
+                        }
+                    }
+                }
+                VStack {
+                    Text("Color Two").lineLimit(nil)
+                    HStack {
+                        VStack{
+                            Text("Red")
+                            Spacer()
+                            Text("Green")
+                            Spacer()
+                            Text("Blue")
+                            Spacer()
+                            Text("Opacity")
+                        }.padding([.trailing], 15)
+                        VStack {
+                            Slider(value: $colorTwoR, from: 0, through: 1, by: 0.01)
+                            Slider(value: $colorTwoG, from: 0, through: 1, by: 0.01)
+                            Slider(value: $colorTwoB, from: 0, through: 1, by: 0.01)
+                            Slider(value: $colorTwoA, from: 0, through: 1, by: 0.01)
+                        }
+                    }
+                }
                 Spacer()
                 Button(action: {
                     self.showModal.toggle()
                     if(!self.categoryName.isEmpty) {
-                        self.store.create(name: self.categoryName)
+                        self.store.create(name: self.categoryName,colorOneR: self.colorOneR, colorOneG: self.colorOneG, colorOneB: self.colorOneB, colorOneA: self.colorOneA, colorTwoR: self.colorTwoR, colorTwoG: self.colorTwoG, colorTwoB: self.colorTwoB, colorTwoA: self.colorTwoA)
                         self.categoryName = ""
                     }
                 }) {
@@ -102,7 +146,7 @@ struct modalAddCategory: View {
                         .foregroundColor(Color.white)
                         .cornerRadius(8)
                 }
-            }
+            }.padding()
         }
     }
 }
@@ -247,7 +291,7 @@ struct CategoryCellItem: View {
         .frame(minHeight: 100, maxHeight: 200)
         .font(.headline)
         .padding()
-        .background(LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: 0.56, green: 0.02, blue: 1.00, opacity: 1.0), Color(.sRGB, red: 0.13, green: 0.98, blue: 0.84, opacity: 1.0)]), startPoint: UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: 1, y: 1)), cornerRadius: 0)
+        .background(LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: self.category.colorOneR, green: self.category.colorOneG, blue: self.category.colorOneB, opacity: self.category.colorOneA), Color(.sRGB, red: self.category.colorTwoR, green: self.category.colorTwoG, blue: self.category.colorTwoB, opacity: self.category.colorTwoA)]), startPoint: UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: 1, y: 1)), cornerRadius: 0)
         .cornerRadius(30)
         .shadow(radius: 5, y: 0)
     }
@@ -255,6 +299,16 @@ struct CategoryCellItem: View {
 
 struct CategoryCellItemEmpty: View {
     @Binding var categoryName: String
+    
+    @Binding var colorOneR: Double
+    @Binding var colorOneG: Double
+    @Binding var colorOneB: Double
+    @Binding var colorOneA: Double
+    
+    @Binding var colorTwoR: Double
+    @Binding var colorTwoG: Double
+    @Binding var colorTwoB: Double
+    @Binding var colorTwoA: Double
     
     var body: some View {
         VStack {
@@ -273,11 +327,11 @@ struct CategoryCellItemEmpty: View {
                 Image(systemName: "chevron.right.circle.fill").foregroundColor(Color.white)
             }
         }
-        .frame(height: (UIScreen.main.bounds.width / 2) - 60)
+        .frame(width: (UIScreen.main.bounds.width / 2), height: (UIScreen.main.bounds.width / 2) - 60)
         .frame(minHeight: 100, maxHeight: 200)
         .font(.headline)
         .padding()
-        .background(LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: 0.56, green: 0.02, blue: 1.00, opacity: 1.0), Color(.sRGB, red: 0.13, green: 0.98, blue: 0.84, opacity: 1.0)]), startPoint: UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: 1, y: 1)), cornerRadius: 0)
+        .background(LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: colorOneR, green: colorOneG, blue: colorOneB, opacity: colorOneA), Color(.sRGB, red: colorTwoR, green: colorTwoG, blue: colorTwoB, opacity: colorTwoA)]), startPoint: UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: 1, y: 1)), cornerRadius: 0)
         .cornerRadius(30)
         .shadow(radius: 5, y: 0)
     }
