@@ -115,6 +115,20 @@ struct CategoryCell: View {
     @EnvironmentObject var store: CategoryStore
     var category: Category
     var categories: [Category]
+    @State var showActionSheet = false
+    @State var categoryIdDelete = UUID()
+    
+    var actionSheet: ActionSheet {
+        ActionSheet(title: Text("Remove Category"),
+            message: Text("Are you sure you want to delete the category and all of it's data?"),
+            buttons: [
+                .destructive(Text("Delete"), onTrigger: {
+                    self.store.deleteById(id: self.categoryIdDelete)
+                }),
+                .cancel()
+            ]
+        )
+    }
     
     var body: some View {
         HStack {
@@ -126,7 +140,8 @@ struct CategoryCell: View {
                     Spacer()
                     VStack {
                         Button(action: {
-                            self.store.deleteById(id: self.category.id)
+                            self.categoryIdDelete = self.category.id
+                            self.showActionSheet.toggle()
                         }) {
                             deleteCategoryButton()
                         }
@@ -149,7 +164,8 @@ struct CategoryCell: View {
                                 Spacer()
                                 VStack {
                                     Button(action: {
-                                        self.store.deleteById(id: self.categories[index + 1].id)
+                                        self.categoryIdDelete = self.categories[index + 1].id
+                                        self.showActionSheet.toggle()
                                     }) {
                                         deleteCategoryButton()
                                     }
@@ -165,7 +181,7 @@ struct CategoryCell: View {
                     }
                 }
             }
-        }
+        }.actionSheet(isPresented: $showActionSheet, content: { self.actionSheet })
     }
 }
 
