@@ -13,6 +13,7 @@ struct ContentView : View {
     
     @EnvironmentObject var store: CategoryStore
     @State var showModalAddCategory = false
+    @State var editModeEnabled = false
     
     var body: some View {
         NavigationView {
@@ -26,7 +27,7 @@ struct ContentView : View {
                     category in
                     if (self.store.categories.firstIndex(of: category) ?? 1) % 2 == 0 {
                         ZStack {
-                            CategoryCell(category: category, categories: self.store.categories)
+                            CategoryCell(category: category, categories: self.store.categories, editMode: self.$editModeEnabled)
                         }
                     }
                     
@@ -35,31 +36,23 @@ struct ContentView : View {
                 .accentColor(Color.white)
             }
             .navigationBarTitle(Text("Categories"))
-            .navigationBarItems(trailing: EditButton())
+            .navigationBarItems(trailing: editModeButton(editModeEnabled: $editModeEnabled))
             .listStyle(.grouped)
         }.sheet(isPresented: $showModalAddCategory, content: { modalAddCategory(store: self.store, showModal: self.$showModalAddCategory) })
     }
-    
-    func addCategory() {
-//        store.categories.insert(Category(name: "Test Category", ballots: ballotTestData), at: 0)
-    }
-    
-    func delete(at offsets: IndexSet) {
-//        if let first = offsets.first {
-//            store.categories.remove(at: first)
-//        }
-    }
-    
-    func move(from source: IndexSet, to destination: Int) {
+}
+
+struct editModeButton: View {
+    @Binding var editModeEnabled: Bool
+    @State var editModeText = "Edit"
+    var body: some View {
         
-//        // sort the indexes low to high
-//        let reversedSource = source.sorted()
-//
-//        // then loop from the back to avoid reordering problems
-//        for index in reversedSource.reversed() {
-//            // for each item, remove it and insert it at the destination
-//            store.categories.insert(store.categories.remove(at: index), at: destination)
-//        }
+        Button(action: {
+            self.editModeEnabled.toggle()
+            self.editModeText = self.editModeEnabled ? "Done" : "Edit"
+        }) {
+            Text(editModeText).foregroundColor(Color.blue)
+        }
     }
 }
 
@@ -221,6 +214,7 @@ struct CategoryCell: View {
     var categories: [Category]
     @State var showActionSheet = false
     @State var categoryIdDelete = UUID()
+    @Binding var editMode: Bool
     
     var actionSheet: ActionSheet {
         ActionSheet(title: Text("Remove Category"),
@@ -247,7 +241,11 @@ struct CategoryCell: View {
                             self.categoryIdDelete = self.category.id
                             self.showActionSheet.toggle()
                         }) {
-                            deleteCategoryButton()
+                            Group {
+                                if self.editMode {
+                                    deleteCategoryButton()
+                                }
+                            }
                         }
                         Spacer()
                     }
@@ -271,7 +269,11 @@ struct CategoryCell: View {
                                         self.categoryIdDelete = self.categories[index + 1].id
                                         self.showActionSheet.toggle()
                                     }) {
-                                        deleteCategoryButton()
+                                        Group {
+                                            if self.editMode {
+                                                deleteCategoryButton()
+                                            }
+                                        }
                                     }
                                     Spacer()
                                 }
