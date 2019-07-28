@@ -70,6 +70,30 @@ class CategoryStore: NSObject, BindableObject {
         saveChanges()
     }
     
+    public func update(id: UUID, name: String, colorOneR: Double, colorOneG: Double, colorOneB: Double, colorOneA: Double, colorTwoR: Double, colorTwoG: Double, colorTwoB: Double, colorTwoA: Double) {
+        
+        var filteredId: [Category] {
+            return self.categories.filter { $0.id == id }
+        }
+        
+        filteredId[0].setValue(name, forKey: "name")
+        
+        filteredId[0].setValue(colorOneR, forKey: "colorOneR")
+        filteredId[0].setValue(colorOneG, forKey: "colorOneG")
+        filteredId[0].setValue(colorOneB, forKey: "colorOneB")
+        filteredId[0].setValue(colorOneA, forKey: "colorOneA")
+        
+        filteredId[0].setValue(colorTwoR, forKey: "colorTwoR")
+        filteredId[0].setValue(colorTwoG, forKey: "colorTwoG")
+        filteredId[0].setValue(colorTwoB, forKey: "colorTwoB")
+        filteredId[0].setValue(colorTwoA, forKey: "colorTwoA")
+        
+        saveChanges()
+        self.persistenceManager.managedObjectContext.refresh(filteredId[0] as NSManagedObject, mergeChanges: true)
+        saveChanges()
+        
+    }
+    
     // MARK: Private Methods
     
     private func fetchCategories() {

@@ -215,6 +215,7 @@ struct CategoryCell: View {
     @State var showActionSheet = false
     @State var categoryIdDelete = UUID()
     @Binding var editMode: Bool
+    @State var showModalEditCategory = false
     
     var actionSheet: ActionSheet {
         ActionSheet(title: Text("Remove Category"),
@@ -231,7 +232,7 @@ struct CategoryCell: View {
     var body: some View {
         HStack {
             ZStack {
-                NavigationLink(destination: Text("hi")) {
+                NavigationLink(destination: categoryDestination(category: self.category, editMode: self.editMode, showModalEditCategory: self.$showModalEditCategory)) {
                     CategoryCellItem(category: category)
                 }
                 HStack {
@@ -259,7 +260,7 @@ struct CategoryCell: View {
                 Group {
                     if self.categories.indices.contains(index + 1) {
                         ZStack {
-                            NavigationLink(destination: Text("hi")) {
+                            NavigationLink(destination: categoryDestination(category: self.categories[index + 1], editMode: self.editMode, showModalEditCategory: self.$showModalEditCategory)) {
                                 CategoryCellItem(category: self.categories[index + 1])
                             }
                             HStack {
@@ -358,6 +359,165 @@ struct CategoryCellItemEmpty: View {
         .background(LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: colorOneR, green: colorOneG, blue: colorOneB, opacity: colorOneA), Color(.sRGB, red: colorTwoR, green: colorTwoG, blue: colorTwoB, opacity: colorTwoA)]), startPoint: UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: 1, y: 1)), cornerRadius: 0)
         .cornerRadius(30)
         .shadow(radius: 5, y: 0)
+    }
+}
+
+struct categoryDestination: View {
+    var category: Category
+    var editMode: Bool
+    @Binding var showModalEditCategory: Bool
+    
+    var body: some View {
+        Group {
+            if editMode {
+                modalEditCategory(category: category, showModal: $showModalEditCategory, categoryId: category.id, categoryName: category.name, colorOneR: category.colorOneR, colorOneG: category.colorOneG, colorOneB: category.colorOneB, colorOneA: category.colorOneA, colorTwoR: category.colorTwoR, colorTwoG: category.colorTwoG, colorTwoB: category.colorTwoB, colorTwoA: category.colorTwoA)
+            } else {
+                Text(category.name)
+            }
+        }
+    }
+}
+
+struct CategoryCellItemEdit: View {
+    @Binding var categoryName: String
+    
+    @Binding var colorOneR: Double
+    @Binding var colorOneG: Double
+    @Binding var colorOneB: Double
+    @Binding var colorOneA: Double
+    
+    @Binding var colorTwoR: Double
+    @Binding var colorTwoG: Double
+    @Binding var colorTwoB: Double
+    @Binding var colorTwoA: Double
+    
+    var body: some View {
+        VStack {
+            Spacer()
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(categoryName)
+                        .foregroundColor(.white)
+                        .lineLimit(2)
+                    Rectangle()
+                        .fill(Color.white)
+                        .frame(width: 30, height: 2)
+                        .cornerRadius(1)
+                }
+                Spacer()
+                Image(systemName: "chevron.right.circle.fill").foregroundColor(Color.white)
+            }
+        }
+        .frame(width: (UIScreen.main.bounds.width / 2), height: (UIScreen.main.bounds.width / 2) - 60)
+        .frame(maxHeight: 200)
+        .font(.headline)
+        .padding()
+        .background(LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: colorOneR, green: colorOneG, blue: colorOneB, opacity: colorOneA), Color(.sRGB, red: colorTwoR, green: colorTwoG, blue: colorTwoB, opacity: colorTwoA)]), startPoint: UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: 1, y: 1)), cornerRadius: 0)
+        .cornerRadius(30)
+        .shadow(radius: 5, y: 0)
+    }
+}
+
+struct modalEditCategory: View {
+    var category: Category
+    @EnvironmentObject var store: CategoryStore
+    @Binding var showModal: Bool
+    
+    var categoryId: UUID
+    @State var categoryName: String
+    
+    @State var colorOneR: Double
+    @State var colorOneG: Double
+    @State var colorOneB: Double
+    @State var colorOneA: Double
+    
+    @State var colorTwoR: Double
+    @State var colorTwoG: Double
+    @State var colorTwoB: Double
+    @State var colorTwoA: Double
+    
+    var body: some View {
+        ScrollView {
+            ZStack {
+                VStack {
+                    CategoryCellItemEdit(categoryName: $categoryName, colorOneR: $colorOneR, colorOneG: $colorOneG, colorOneB: $colorOneB, colorOneA: $colorOneA, colorTwoR: $colorTwoR, colorTwoG: $colorTwoG, colorTwoB: $colorTwoB, colorTwoA: $colorTwoA)
+                    TextField("Enter the category name", text: $categoryName)
+                        .padding()
+                        .textFieldStyle(.roundedBorder)
+                    VStack(alignment: .leading) {
+                        Text("Color One")
+                            .lineLimit(nil)
+                            .font(.title)
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Spacer()
+                                Text("Red")
+                                Spacer()
+                                Text("Green")
+                                Spacer()
+                                Text("Blue")
+                                Spacer()
+                                Text("Opacity")
+                                Spacer()
+                            }.padding([.trailing], 15)
+                            VStack {
+                                Spacer()
+                                Slider(value: $colorOneR, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorOneG, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorOneB, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorOneA, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                            }
+                        }.padding([.top], -20)
+                    }
+                    VStack(alignment: .leading) {
+                        Text("Color Two")
+                            .lineLimit(nil)
+                            .font(.title)
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Spacer()
+                                Text("Red")
+                                Spacer()
+                                Text("Green")
+                                Spacer()
+                                Text("Blue")
+                                Spacer()
+                                Text("Opacity")
+                                Spacer()
+                            }.padding([.trailing], 15)
+                            VStack {
+                                Spacer()
+                                Slider(value: $colorTwoR, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorTwoG, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorTwoB, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorTwoA, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                            }
+                        }.padding([.top], -20)
+                    }
+                    Spacer()
+                    Button(action: {
+//                        self.showModal.toggle()
+                        if(!self.categoryName.isEmpty) {
+                            self.store.update(id: self.categoryId, name: self.categoryName, colorOneR: self.colorOneR, colorOneG: self.colorOneG, colorOneB: self.colorOneB, colorOneA: self.colorOneA, colorTwoR: self.colorTwoR, colorTwoG: self.colorTwoG, colorTwoB: self.colorTwoB, colorTwoA: self.colorTwoA)                            
+                        }
+                    }) {
+                        Text("Save")
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(Color.white)
+                            .cornerRadius(8)
+                    }
+                }.padding()
+            }
+        }.navigationBarTitle(Text("Edit Categoriy"))
     }
 }
 
