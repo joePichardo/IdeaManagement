@@ -79,74 +79,96 @@ struct modalAddCategory: View {
     @State var colorTwoA: Double = 1
     
     var body: some View {
-        ZStack {
-            VStack {
-                HStack {
+        ScrollView {
+            ZStack {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            self.showModal.toggle()
+                            self.categoryName = ""
+                        }) {
+                            Text("Cancel")
+                        }
+                    }
+                    CategoryCellItemEmpty(categoryName: $categoryName, colorOneR: $colorOneR, colorOneG: $colorOneG, colorOneB: $colorOneB, colorOneA: $colorOneA, colorTwoR: $colorTwoR, colorTwoG: $colorTwoG, colorTwoB: $colorTwoB, colorTwoA: $colorTwoA)
+                    TextField("Enter the category name", text: $categoryName)
+                        .padding()
+                        .textFieldStyle(.roundedBorder)
+                    VStack(alignment: .leading) {
+                        Text("Color One")
+                            .lineLimit(nil)
+                            .font(.title)
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Spacer()
+                                Text("Red")
+                                Spacer()
+                                Text("Green")
+                                Spacer()
+                                Text("Blue")
+                                Spacer()
+                                Text("Opacity")
+                                Spacer()
+                            }.padding([.trailing], 15)
+                            VStack {
+                                Spacer()
+                                Slider(value: $colorOneR, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorOneG, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorOneB, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorOneA, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                            }
+                        }.padding([.top], -20)
+                    }
+                    VStack(alignment: .leading) {
+                        Text("Color Two")
+                            .lineLimit(nil)
+                            .font(.title)
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Spacer()
+                                Text("Red")
+                                Spacer()
+                                Text("Green")
+                                Spacer()
+                                Text("Blue")
+                                Spacer()
+                                Text("Opacity")
+                                Spacer()
+                            }.padding([.trailing], 15)
+                            VStack {
+                                Spacer()
+                                Slider(value: $colorTwoR, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorTwoG, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorTwoB, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                                Slider(value: $colorTwoA, from: 0, through: 1, by: 0.01)
+                                Spacer()
+                            }
+                        }.padding([.top], -20)
+                    }
                     Spacer()
                     Button(action: {
                         self.showModal.toggle()
-                        self.categoryName = ""
+                        if(!self.categoryName.isEmpty) {
+                            self.store.create(name: self.categoryName,colorOneR: self.colorOneR, colorOneG: self.colorOneG, colorOneB: self.colorOneB, colorOneA: self.colorOneA, colorTwoR: self.colorTwoR, colorTwoG: self.colorTwoG, colorTwoB: self.colorTwoB, colorTwoA: self.colorTwoA)
+                            self.categoryName = ""
+                        }
                     }) {
-                        Text("Cancel")
+                        Text("Save")
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(Color.white)
+                            .cornerRadius(8)
                     }
-                }
-                CategoryCellItemEmpty(categoryName: $categoryName, colorOneR: $colorOneR, colorOneG: $colorOneG, colorOneB: $colorOneB, colorOneA: $colorOneA, colorTwoR: $colorTwoR, colorTwoG: $colorTwoG, colorTwoB: $colorTwoB, colorTwoA: $colorTwoA).padding()
-                TextField("Enter the category name", text: $categoryName).padding()
-                VStack {
-                    Text("Color One").lineLimit(nil)
-                    HStack {
-                        VStack{
-                            Text("Red")
-                            Spacer()
-                            Text("Green")
-                            Spacer()
-                            Text("Blue")
-                            Spacer()
-                            Text("Opacity")
-                        }.padding([.trailing], 15)
-                        VStack {
-                            Slider(value: $colorOneR, from: 0, through: 1, by: 0.01)
-                            Slider(value: $colorOneG, from: 0, through: 1, by: 0.01)
-                            Slider(value: $colorOneB, from: 0, through: 1, by: 0.01)
-                            Slider(value: $colorOneA, from: 0, through: 1, by: 0.01)
-                        }
-                    }
-                }
-                VStack {
-                    Text("Color Two").lineLimit(nil)
-                    HStack {
-                        VStack{
-                            Text("Red")
-                            Spacer()
-                            Text("Green")
-                            Spacer()
-                            Text("Blue")
-                            Spacer()
-                            Text("Opacity")
-                        }.padding([.trailing], 15)
-                        VStack {
-                            Slider(value: $colorTwoR, from: 0, through: 1, by: 0.01)
-                            Slider(value: $colorTwoG, from: 0, through: 1, by: 0.01)
-                            Slider(value: $colorTwoB, from: 0, through: 1, by: 0.01)
-                            Slider(value: $colorTwoA, from: 0, through: 1, by: 0.01)
-                        }
-                    }
-                }
-                Spacer()
-                Button(action: {
-                    self.showModal.toggle()
-                    if(!self.categoryName.isEmpty) {
-                        self.store.create(name: self.categoryName,colorOneR: self.colorOneR, colorOneG: self.colorOneG, colorOneB: self.colorOneB, colorOneA: self.colorOneA, colorTwoR: self.colorTwoR, colorTwoG: self.colorTwoG, colorTwoB: self.colorTwoB, colorTwoA: self.colorTwoA)
-                        self.categoryName = ""
-                    }
-                }) {
-                    Text("Save")
-                        .padding()
-                        .background(Color.blue)
-                        .foregroundColor(Color.white)
-                        .cornerRadius(8)
-                }
-            }.padding()
+                }.padding()
+            }
         }
     }
 }
@@ -328,7 +350,7 @@ struct CategoryCellItemEmpty: View {
             }
         }
         .frame(width: (UIScreen.main.bounds.width / 2), height: (UIScreen.main.bounds.width / 2) - 60)
-        .frame(minHeight: 100, maxHeight: 200)
+        .frame(maxHeight: 200)
         .font(.headline)
         .padding()
         .background(LinearGradient(gradient: Gradient(colors: [Color(.sRGB, red: colorOneR, green: colorOneG, blue: colorOneB, opacity: colorOneA), Color(.sRGB, red: colorTwoR, green: colorTwoG, blue: colorTwoB, opacity: colorTwoA)]), startPoint: UnitPoint(x: 0, y: 0), endPoint: UnitPoint(x: 1, y: 1)), cornerRadius: 0)
